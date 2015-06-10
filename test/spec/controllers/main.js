@@ -1,22 +1,31 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: SearchController', function () {
 
   // load the controller's module
   beforeEach(module('spotapiApp'));
 
-  var MainCtrl,
-    scope;
+  var SearchController, scope, location;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope, $location) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    location = $location;
+    SearchController = $controller('SearchController', {
       $scope: scope
     });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+  it('should default to albums', function () {
+    expect(scope.types).toBe('album');
   });
+
+  describe( '$scope.runSearch', function() {
+    it( 'should update url', function() {
+      scope.searchQuery = 'biosphere';
+      scope.types = 'artist';
+      scope.runSearch();
+      expect( location.path() ).toBe( '/search/artist/biosphere' );
+    } );
+  } );
 });
